@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PartnersSlider from '../components/PartnersSlider.jsx'
 import logo from '../assets/AAWBA .png'
+import staff1 from '../assets/staff1.jpg'
+import staff2 from '../assets/staff2.jpg'
+import staff3 from '../assets/staff3.jpg'
 import './Home.css'
 
 const PARTNER_CATEGORIES = [
@@ -17,16 +21,25 @@ const PARTNER_LOGOS = Array.from({ length: 8 }, (_, index) => ({
 }))
 
 const FOUNDER = {
-  name: 'Jane Lin',
-  role: 'Founder & Board Chair',
-  desc: 'Jane founded AAWBA after two decades in public health, driven to close the gap between mainstream wellness resources and the needs of Asian American families.',
+  name: 'Amy Wu',
+  role: 'Founder / Board Chair / CEO',
+  photo: staff1,
+  desc: 'Emigrating to the United States in the 1990s as a first-generation Chinese immigrant, Amy Wu has navigated a multifaceted life journey—transitioning from a TV artist and singer to a wife, mother, entrepreneur, and dedicated community advocate. Through every stage of her personal and professional growth, she has remained grounded in a core belief: true beauty springs from health, genuine strength comes from within, and lasting happiness lies in balance.\n\nDriven by a lifelong passion for service, Amy has long been an active leader in the Asian American community and a committed public servant, earning three U.S. President’s Volunteer Service Awards. Having witnessed countless women quietly balancing the demands of family, career, and self, she deeply understands that women are not only the heart of a happy home, but also a vital force shaping the next generation and strengthening the broader community. Inspired by this vision, she founded the Asian American Wellness and Beauty Association (AAWBA) to create an empowering space where women can connect, learn, grow, and uplift one another.\n\nAs Founder, Amy leads AAWBA with a mission to cultivate a trusted community centered on holistic health, timeless beauty, personal development, and public service. She firmly believes that when a woman nurtures a healthy body, a positive mindset, inner confidence, and a drive for lifelong learning, she naturally illuminates her family, inspires her children, and warms her community. Amy’s vision is to build an inclusive, sustainable platform where women discover their best selves, foster authentic friendships, and pass forward love and kindness to create a better society together.',
 }
 
 const BOARD = [
-  { name: 'Michael Wu', role: 'Treasurer' },
-  { name: 'Grace Park', role: 'Secretary' },
-  { name: 'David Chen', role: 'Director, Programs' },
-  { name: 'Sarah Kim', role: 'Director, Partnerships' },
+  {
+    name: 'Jiying Zhao',
+    role: 'Founding Strategy & Launch Lead',
+    photo: staff2,
+    desc: 'Jiying built her academic foundation and professional experience at the University of Saskatchewan, Canada, and Northeastern University, USA. She has extensive experience in external affairs, strategic partnership development and sponsorship operations across multinational corporations, professional societies and international organizations. She has long specialized in cross-cultural outreach, membership program development and strategic collaboration across diverse cultural landscapes.\n\nAs an Asian immigrant woman, Jiying leads this nonprofit initiative as Founding Strategy & Launch Lead. Leveraging her expertise in alliance building, resource coordination and strategy execution, she works to cultivate a trusted community space for Asian women. She firmly believes health and beauty should not be confined to narrow external standards; they are fundamental rights that enable Asian women to center themselves, rebuild inner strength and grow freely. Her vision is to build an inclusive, sustainable support network that empowers more Asian women to nurture holistic well-being and radiate authentic inner confidence.',
+  },
+  {
+    name: 'Robert Hao Wu, MD, FACP',
+    role: 'Owner & Medical Director / Clinical Teaching Instructor',
+    photo: staff3,
+    desc: 'Dr. Robert Hao Wu built his academic foundation in medical sciences and traditional Chinese medicine in Guangzhou, China, and completed his internal medicine residency at Cornell Medical Center / New York Downtown Hospital in New York. With over three decades of clinical experience across major healthcare institutions, including Tufts Medical Center, Quincy Medical Center, and Carney Hospital, he is a board-certified internist and a Fellow of the American College of Physicians (FACP). He also serves as a Clinical Teaching Instructor at Boston University School of Medicine.\n\nAs a dedicated physician, leader, and active community advocate, Dr. Wu serves as the Owner and Medical Director of his primary care practice and Amee’s Medical Spa in Massachusetts. Beyond his clinical practice, he has held key leadership positions across various professional and cultural organizations, including serving as Chairman of the Association of Chinese American Physicians and the Gee Duck Sam Duck Association of Boston. Dr. Wu is deeply committed to delivering comprehensive primary care, advancing medical education, and fostering health, wellness, and community support for diverse populations.',
+  },
 ]
 
 const LEADERSHIP_GROUPS = [
@@ -41,10 +54,12 @@ const LEADERSHIP_GROUPS = [
 ]
 
 const VALUES = [
-  { title: 'Respect', desc: 'Honoring diverse cultures, generations, and lived experiences.' },
-  { title: 'Empowerment', desc: 'Equipping people with knowledge to make confident decisions.' },
-  { title: 'Community', desc: 'Building networks of care that outlast any single program.' },
-  { title: 'Integrity', desc: 'Sharing information that is evidence-based and transparent.' },
+  { title: 'Health & Well-being', desc: 'We believe that physical, mental, emotional, and social well-being are the foundation of a fulfilling life.' },
+  { title: 'Empowerment', desc: 'We equip women with knowledge, resources, confidence, and opportunities to make informed decisions and achieve their fullest potential.' },
+  { title: 'Community & Inclusion', desc: 'We foster an inclusive community where every woman is respected, welcomed, and supported regardless of age, background, or life stage.' },
+  { title: 'Cultural Respect', desc: 'We celebrate the richness of Asian cultures while embracing diversity, cross-cultural understanding, and mutual respect.' },
+  { title: 'Integrity & Responsibility', desc: 'We act with transparency, accountability, professionalism, and ethical leadership in all that we do.' },
+  { title: 'Collaboration', desc: 'We believe meaningful partnerships create greater opportunities and lasting impact for individuals and communities.' },
 ]
 
 const PROGRAMS = [
@@ -83,33 +98,67 @@ const FEATURED_PROGRAMS = [
 const PILLARS = [
   {
     number: '01',
-    title: 'Understand',
-    desc: 'We listen first — researching the wellness and beauty needs unique to Asian American communities.',
+    title: 'Empowering Women',
+    desc: 'We inspire women to cultivate inner strength, embrace their authentic confidence, and lead fulfilling lives.',
   },
   {
     number: '02',
-    title: 'Connect',
-    desc: 'We build bridges between individuals, professionals, and organizations who can support each other.',
+    title: 'Inspiring Wellness',
+    desc: 'We promote holistic health and balanced living to help every woman look and feel vibrant.',
   },
   {
     number: '03',
-    title: 'Act',
-    desc: 'We turn understanding into programs, partnerships, and resources that create real change.',
+    title: 'Building Community',
+    desc: 'We create a supportive, inclusive network where women connect, grow, and uplift one another together.',
   },
 ]
 
 function Home() {
+  const [activePerson, setActivePerson] = useState(null)
+
   return (
     <>
+      {activePerson && (
+        <div
+          className="leadership-modal-overlay"
+          onClick={() => setActivePerson(null)}
+        >
+          <div
+            className="leadership-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="leadership-modal-name"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="leadership-modal__close"
+              aria-label="Close"
+              onClick={() => setActivePerson(null)}
+            >
+              ×
+            </button>
+            <div className="leadership-modal__photo">
+              <img src={activePerson.photo} alt={activePerson.name} />
+            </div>
+            <div className="leadership-modal__body">
+              <h3 id="leadership-modal-name">{activePerson.name}</h3>
+              <p className="leadership__role">{activePerson.role}</p>
+              {activePerson.desc.split('\n\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       <section className="hero">
         <img className="hero__watermark" src={logo} alt="" aria-hidden="true" />
         <div className="hero__content">
           <p className="hero__eyebrow">Asian American Wellness &amp; Beauty Association</p>
-          <h1>Wellness. Confidence. Community.</h1>
+          <h1>Empowering Women.<br></br> Inspiring Wellness. <br></br> Building Community.</h1>
           <p className="hero__tagline">Stronger together.</p>
           <p className="hero__desc">
-            We help Asian American communities access culturally-grounded wellness
-            education, beauty confidence, and belonging — together.
+            Wellness rooted in culture. Community built for Asian American women and families.
           </p>
           <div className="hero__actions">
             <Link to="/contact" className="btn btn--solid">
@@ -146,17 +195,7 @@ function Home() {
               <p className="about__eyebrow">About AAWBA</p>
               <h2>Our Story</h2>
               <p>
-                AAWBA was founded by a small group of first- and second-generation
-                Asian American women who noticed a gap: mainstream wellness and
-                beauty resources rarely reflected their skin, their bodies, their
-                family histories, or their cultural values. What began as informal
-                living-room gatherings has grown into a nonprofit serving hundreds
-                of community members each year.
-              </p>
-              <p>
-                Today we partner with healthcare providers, beauty professionals,
-                and community organizations to make culturally-informed wellness
-                education and resources accessible to everyone.
+                AAWBA connects Asian American women and families with culturally informed health education, trusted resources and inclusive community experiences—so every person can feel informed, supported and empowered.
               </p>
             </div>
           </div>
@@ -165,15 +204,12 @@ function Home() {
             <div className="about__card-col">
               <h3>Mission &amp; Vision</h3>
               <p>
-                <strong>Mission —</strong> To advance the health, confidence, and
-                wellbeing of Asian American communities through
-                culturally-grounded education, resources, and connection.
+                <strong>Mission —</strong> AAWBA empowers Asian American women and their families to thrive through culturally responsive health education, trusted resource navigation, meaningful community engagement, leadership development, and responsible partnerships that advance lifelong well-being and opportunity.
               </p>
             </div>
             <div className="about__card-col">
               <p>
-                <strong>Vision —</strong> A future where every Asian American feels
-                seen, informed, and supported in their wellness and beauty journey.
+                <strong>Vision —</strong> A future where every Asian American woman feels seen, heard, supported, and empowered to live a healthier life, pursue her aspirations with confidence, and create lasting positive impact for her family and community.
               </p>
             </div>
           </div>
@@ -304,13 +340,20 @@ function Home() {
           </div>
 
           <div className="leadership__founder">
-            <div className="leadership__founder-photo">
-              <img src={logo} alt={FOUNDER.name} />
-            </div>
-            <div className="leadership__founder-body">
-              <h3>{FOUNDER.name}</h3>
-              <p className="leadership__role">{FOUNDER.role}</p>
-              <p>{FOUNDER.desc}</p>
+            <h3>Founder</h3>
+            <div className="leadership__board-grid leadership__founder-grid">
+              <div className="leadership__board-member">
+                <button
+                  type="button"
+                  className="leadership__board-photo"
+                  onClick={() => setActivePerson(FOUNDER)}
+                  aria-label={`View details for ${FOUNDER.name}`}
+                >
+                  <img src={FOUNDER.photo} alt={FOUNDER.name} />
+                </button>
+                <p className="leadership__board-name">{FOUNDER.name}</p>
+                <p className="leadership__role">{FOUNDER.role}</p>
+              </div>
             </div>
           </div>
 
@@ -319,9 +362,14 @@ function Home() {
             <div className="leadership__board-grid">
               {BOARD.map((member) => (
                 <div className="leadership__board-member" key={member.name}>
-                  <div className="leadership__board-photo">
-                    <img src={logo} alt={member.name} />
-                  </div>
+                  <button
+                    type="button"
+                    className="leadership__board-photo"
+                    onClick={() => setActivePerson(member)}
+                    aria-label={`View details for ${member.name}`}
+                  >
+                    <img src={member.photo} alt={member.name} />
+                  </button>
                   <p className="leadership__board-name">{member.name}</p>
                   <p className="leadership__role">{member.role}</p>
                 </div>
