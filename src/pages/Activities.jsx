@@ -1,27 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/AAWBA .png'
+import { UPCOMING_EVENTS } from '../data/events'
 import './Activities.css'
-
-const FEATURED_EVENT = {
-  title: '2026 Charity Concert',
-  date: 'Saturday, October 17, 2026 · 6:30 PM',
-  location: 'Riverside Community Hall (details TBD)',
-  desc: "Our flagship annual fundraiser bringing together music, culture, and community to support AAWBA's wellness programs. Sponsorship opportunities available.",
-}
-
-const EVENTS = [
-  {
-    title: 'Skincare & Confidence Workshop',
-    date: 'September 12, 2026 · 10:00 AM',
-    location: 'Community Wellness Center',
-  },
-  {
-    title: 'Monthly Wellness Circle',
-    date: 'Third Thursday, every month · 6:00 PM',
-    location: 'Virtual + in-person',
-  },
-]
 
 const PAST_EVENTS = [
   {
@@ -71,6 +52,30 @@ function PastEventCard({ event }) {
   )
 }
 
+function UpcomingEventCard({ event }) {
+  return (
+    <Link to={`/activities/${event.slug}`} className="events__card events__card--link">
+      <div className={'events__card-media' + (event.poster.src ? ' events__card-media--photo' : '')}>
+        {event.poster.src ? (
+          <img src={event.poster.src} alt={event.title} />
+        ) : (
+          <div className="media-placeholder">{event.poster.label}</div>
+        )}
+      </div>
+      <div className="events__card-body">
+        {event.featured && <span className="events__badge">Featured</span>}
+        <h3>{event.title}</h3>
+        <p className="events__meta">
+          {event.dateLabel} · {event.time}
+        </p>
+        <p className="events__meta">{event.location}</p>
+        <p className="events__card-desc">{event.summary}</p>
+        <span className="events__rsvp">View Details →</span>
+      </div>
+    </Link>
+  )
+}
+
 function Activities() {
   const [showAll, setShowAll] = useState(false)
   return (
@@ -94,40 +99,9 @@ function Activities() {
             <h2>What&apos;s next</h2>
           </div>
 
-          <div className="events__featured">
-            <div className="events__featured-media">
-              <img src={logo} alt="" aria-hidden="true" />
-            </div>
-            <div className="events__featured-body">
-              <span className="events__badge">Featured</span>
-              <h3>{FEATURED_EVENT.title}</h3>
-              <p className="events__meta">Date: {FEATURED_EVENT.date}</p>
-              <p className="events__meta">Location: {FEATURED_EVENT.location}</p>
-              <p className="events__desc">{FEATURED_EVENT.desc}</p>
-              <div className="events__actions">
-                <Link to="/contact" className="events__btn events__btn--solid">
-                  Sponsor This Event
-                </Link>
-                <button type="button" className="events__btn events__btn--outline">
-                  Get Updates
-                </button>
-              </div>
-            </div>
-          </div>
-
           <div className="events__grid">
-            {EVENTS.map((event) => (
-              <div className="events__card" key={event.title}>
-                <div className="events__card-media">
-                  <img src={logo} alt="" aria-hidden="true" />
-                </div>
-                <div className="events__card-body">
-                  <h3>{event.title}</h3>
-                  <p className="events__meta">{event.date}</p>
-                  <p className="events__meta">{event.location}</p>
-                  <span className="events__rsvp">RSVP →</span>
-                </div>
-              </div>
+            {UPCOMING_EVENTS.map((event) => (
+              <UpcomingEventCard event={event} key={event.slug} />
             ))}
           </div>
         </div>
