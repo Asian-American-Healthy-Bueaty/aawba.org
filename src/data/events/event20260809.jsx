@@ -1,8 +1,8 @@
-import poster from '../../assets/event20260809/poster20260809.jpg'
-import photo1 from '../../assets/event20260809/event20260809 (1).jpg'
-import photo2 from '../../assets/event20260809/event20260809 (2).jpg'
-import photo3 from '../../assets/event20260809/event20260809 (3).jpg'
-import photo4 from '../../assets/event20260809/event20260809 (4).jpg'
+import poster from '../../assets/event20260809/event20260809 (9).jpg'
+import photo1 from '../../assets/event20260809/event20260809 (9).jpg'
+import photo2 from '../../assets/event20260809/event20260809 (10).jpg'
+import photo3 from '../../assets/event20260809/event20260809 (11).jpg'
+import photo4 from '../../assets/event20260809/event20260809 (12).jpg'
 
 export const event20260809 = {
   slug: 'zuo-hong-photography-talk',

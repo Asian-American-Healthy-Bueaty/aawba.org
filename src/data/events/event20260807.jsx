@@ -1,13 +1,8 @@
 import poster from '../../assets/event20260807/poster20260807.jpg'
-import photo1 from '../../assets/event20260807/event20260807 (1).jpg'
-import photo2 from '../../assets/event20260807/event20260807 (2).jpg'
-import photo3 from '../../assets/event20260807/event20260807 (3).jpg'
-import photo4 from '../../assets/event20260807/event20260807 (4).jpg'
-import photo5 from '../../assets/event20260807/event20260807 (5).jpg'
-import photo6 from '../../assets/event20260807/event20260807 (6).jpg'
-import photo7 from '../../assets/event20260807/event20260807 (7).jpg'
-import photo8 from '../../assets/event20260807/event20260807 (8).jpg'
-import photo9 from '../../assets/event20260807/event20260807 (9).jpg'
+import photo1 from '../../assets/event20260807/event20260807 (10).jpg'
+import photo2 from '../../assets/event20260807/event20260807 (11).jpg'
+import photo3 from '../../assets/event20260807/event20260807 (12).jpg'
+import photo4 from '../../assets/event20260807/event20260807 (13).jpg'
 
 export const event20260807 = {
   slug: 'sound-deep-listening-evening',
@@ -75,7 +70,7 @@ export const event20260807 = {
     },
   ],
   poster: { src: poster, label: 'event poster' },
-  gallery: [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9].map(
+  gallery: [photo1, photo2, photo3, photo4].map(
     (src, i) => ({ src, label: `Photo ${i + 1}` }),
   ),
 }
