@@ -4,9 +4,7 @@ import './Footer.css'
 
 const EXPLORE_LINKS = [
   { label: 'About', path: '/', hash: '#about' },
-  { label: 'Our Work', path: '/', hash: '#our-work' },
   { label: 'Activities', path: '/activities' },
-  { label: 'Partners', path: '/', hash: '#partners' },
 ]
 
 const ORGANIZATION_LINKS = [

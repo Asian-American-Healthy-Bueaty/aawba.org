@@ -18,6 +18,7 @@ export const event20260807 = {
   location: 'Amy Medical Spa, Watertown',
   summary:
     "In today's fast-moving world, many of us are looking for a way to slow down, to come back to ourselves, and to truly rest.",
+  registrationUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeDHu2A8v3nYVU1DF5bqUgrY2S8etxGL2DDg80Ag3q8Ou13QA/viewform',
   description: [
     {
       heading: 'Why Gong?',

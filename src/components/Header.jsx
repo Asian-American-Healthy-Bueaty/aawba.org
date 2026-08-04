@@ -6,9 +6,7 @@ import './Header.css'
 const NAV_LINKS = [
   { label: 'Home', path: '/' },
   { label: 'About', path: '/', hash: '#about' },
-  { label: 'Our Work', path: '/', hash: '#our-work' },
   { label: 'Activities', path: '/activities' },
-  { label: 'Partners', path: '/', hash: '#partners' },
   { label: 'Leadership & Governance', path: '/', hash: '#leadership' },
 ]
 

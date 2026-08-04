@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
-import { UPCOMING_EVENTS } from '../data/events'
+import { UPCOMING_EVENTS, PAST_EVENTS } from '../data/events'
 import GallerySlider from '../components/GallerySlider.jsx'
 import './EventDetail.css'
 
 function EventDetail() {
   const { slug } = useParams()
-  const event = UPCOMING_EVENTS.find((item) => item.slug === slug)
+  const event = [...UPCOMING_EVENTS, ...PAST_EVENTS].find((item) => item.slug === slug)
 
   if (!event) {
     return (

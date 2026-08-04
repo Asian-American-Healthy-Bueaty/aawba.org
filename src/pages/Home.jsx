@@ -1,24 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import PartnersSlider from '../components/PartnersSlider.jsx'
 import logo from '../assets/AAWBA .png'
 import staff1 from '../assets/staff1.jpg'
 import staff2 from '../assets/staff2.jpg'
 import staff3 from '../assets/staff3.jpg'
+import staff4 from '../assets/staff4.jpg'
+import { UPCOMING_EVENTS } from '../data/events'
+import EventCard from '../components/EventCard.jsx'
 import './Home.css'
-
-const PARTNER_CATEGORIES = [
-  { title: 'Corporate', desc: 'Sponsorships and employee wellness collaborations.' },
-  { title: 'Healthcare & Professional', desc: 'Clinical expertise and referral partnerships.' },
-  { title: 'Foundation & Institutional', desc: 'Grants and multi-year program funding.' },
-  { title: 'Community & Media', desc: 'Storytelling and grassroots outreach.' },
-]
-
-const PARTNER_LOGOS = Array.from({ length: 8 }, (_, index) => ({
-  id: index + 1,
-  src: logo,
-  alt: 'Partner logo',
-}))
+import './Activities.css'
 
 const FOUNDER = {
   name: 'Amy Wu',
@@ -29,16 +19,25 @@ const FOUNDER = {
 
 const BOARD = [
   {
-    name: 'Jiying Zhao',
-    role: 'Founding Strategy & Launch Lead',
-    photo: staff2,
-    desc: 'Jiying built her academic foundation and professional experience at the University of Saskatchewan, Canada, and Northeastern University, USA. She has extensive experience in external affairs, strategic partnership development and sponsorship operations across multinational corporations, professional societies and international organizations. She has long specialized in cross-cultural outreach, membership program development and strategic collaboration across diverse cultural landscapes.\n\nAs an Asian immigrant woman, Jiying leads this nonprofit initiative as Founding Strategy & Launch Lead. Leveraging her expertise in alliance building, resource coordination and strategy execution, she works to cultivate a trusted community space for Asian women. She firmly believes health and beauty should not be confined to narrow external standards; they are fundamental rights that enable Asian women to center themselves, rebuild inner strength and grow freely. Her vision is to build an inclusive, sustainable support network that empowers more Asian women to nurture holistic well-being and radiate authentic inner confidence.',
-  },
-  {
     name: 'Robert Hao Wu, MD, FACP',
     role: 'Owner & Medical Director / Clinical Teaching Instructor',
     photo: staff3,
     desc: 'Dr. Robert Hao Wu built his academic foundation in medical sciences and traditional Chinese medicine in Guangzhou, China, and completed his internal medicine residency at Cornell Medical Center / New York Downtown Hospital in New York. With over three decades of clinical experience across major healthcare institutions, including Tufts Medical Center, Quincy Medical Center, and Carney Hospital, he is a board-certified internist and a Fellow of the American College of Physicians (FACP). He also serves as a Clinical Teaching Instructor at Boston University School of Medicine.\n\nAs a dedicated physician, leader, and active community advocate, Dr. Wu serves as the Owner and Medical Director of his primary care practice and Amee’s Medical Spa in Massachusetts. Beyond his clinical practice, he has held key leadership positions across various professional and cultural organizations, including serving as Chairman of the Association of Chinese American Physicians and the Gee Duck Sam Duck Association of Boston. Dr. Wu is deeply committed to delivering comprehensive primary care, advancing medical education, and fostering health, wellness, and community support for diverse populations.',
+  },
+  {
+    name: 'Richard K. Chang, Esq.',
+    role: 'Board Director',
+    photo: staff4,
+    desc: 'Richard K. Chang, Esq. brings extensive experience in educational leadership, law, nonprofit governance and cross-cultural community engagement to the Board of Directors of the Asian American Wellness and Beauty Association. He has served as Head of School at Josiah Quincy Upper School in Boston and previously served as Interim Academic Superintendent for Boston Public Schools. Throughout his career, he has led major institutional initiatives, developed community and international partnerships, and advanced inclusive educational programs supporting multilingual learners and students with diverse needs.\n\nRichard holds a Juris Doctor from Boston College Law School and an A.B. in East Asian Studies from Harvard College. He has served on the boards and advisory bodies of numerous education, youth-development and community organizations across Greater Boston. Fluent in Mandarin Chinese and shaped by extensive international experience, Richard brings valuable expertise in governance, education, community partnerships and culturally responsive leadership to AAWBA’s mission of advancing the health, well-being and quality of life of Asian American women and families.',
+  },
+]
+
+const STAFF = [
+  {
+    name: 'Jiying Zhao',
+    role: 'Founding Strategy & Launch Lead',
+    photo: staff2,
+    desc: 'Jiying built her academic foundation and professional experience at the University of Saskatchewan, Canada, and Northeastern University, USA. She has extensive experience in external affairs, strategic partnership development and sponsorship operations across multinational corporations, professional societies and international organizations. She has long specialized in cross-cultural outreach, membership program development and strategic collaboration across diverse cultural landscapes.\n\nAs an Asian immigrant woman, Jiying leads this nonprofit initiative as Founding Strategy & Launch Lead. Leveraging her expertise in alliance building, resource coordination and strategy execution, she works to cultivate a trusted community space for Asian women. She firmly believes health and beauty should not be confined to narrow external standards; they are fundamental rights that enable Asian women to center themselves, rebuild inner strength and grow freely. Her vision is to build an inclusive, sustainable support network that empowers more Asian women to nurture holistic well-being and radiate authentic inner confidence.',
   },
 ]
 
@@ -60,39 +59,6 @@ const VALUES = [
   { title: 'Cultural Respect', desc: 'We celebrate the richness of Asian cultures while embracing diversity, cross-cultural understanding, and mutual respect.' },
   { title: 'Integrity & Responsibility', desc: 'We act with transparency, accountability, professionalism, and ethical leadership in all that we do.' },
   { title: 'Collaboration', desc: 'We believe meaningful partnerships create greater opportunities and lasting impact for individuals and communities.' },
-]
-
-const PROGRAMS = [
-  {
-    title: 'Resource Navigation',
-    desc: 'Helping families find culturally-competent providers, insurance guidance, and community services.',
-  },
-  {
-    title: 'Confidence & Beauty',
-    desc: 'Skincare, styling, and self-image programming rooted in cultural pride, not conformity.',
-  },
-  {
-    title: 'Community Connection',
-    desc: 'Peer circles, mentorship, and events that build lasting relationships across generations.',
-  },
-]
-
-const WORK_STEPS = [
-  'Listen to community needs through surveys & listening sessions',
-  'Design programs with medical & beauty professional advisors',
-  'Deliver bilingual workshops, events, and 1:1 navigation',
-  'Measure impact and refine each season',
-]
-
-const FEATURED_PROGRAMS = [
-  {
-    title: '2026 Charity Concert',
-    desc: 'our flagship annual fundraiser blending music, culture, and community.',
-  },
-  {
-    title: 'Monthly Wellness Circles',
-    desc: 'small-group sessions on nutrition, skincare, and mental health.',
-  },
 ]
 
 const PILLARS = [
@@ -242,92 +208,23 @@ function Home() {
         </div>
       </section>
 
-      <section id="our-work" className="work">
-        <div className="work__inner">
-          <div className="work__intro">
-            <p className="work__eyebrow">Our Work</p>
-            <h2>Programs that meet real needs</h2>
+      <section className="events">
+        <div className="events__inner">
+          <div className="events__intro">
+            <p className="events__eyebrow">Upcoming Events</p>
+            <h2>What&apos;s next</h2>
           </div>
 
-          <div className="work__grid">
-            <div className="work__feature">
-              <div className="work__feature-media">
-                <img src={logo} alt="AAWBA" />
-              </div>
-              <div className="work__feature-body">
-                <h3>Wellness Education</h3>
-                <p>
-                  Workshops on preventive health, nutrition, and mental
-                  wellbeing tailored to Asian American communities.
-                </p>
-              </div>
-            </div>
-
-            <div className="work__list">
-              {PROGRAMS.map((program) => (
-                <div className="work__card" key={program.title}>
-                  <div className="work__card-media">
-                    <img src={logo} alt="" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h4>{program.title}</h4>
-                    <p>{program.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="work__banner">
-            <div>
-              <h3>How We Work</h3>
-              <ol className="work__steps">
-                {WORK_STEPS.map((step, index) => (
-                  <li key={step}>
-                    <span className="work__step-num">{index + 1}</span>
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <div className="work__featured">
-              <h3>Featured Programs</h3>
-              {FEATURED_PROGRAMS.map((item) => (
-                <p key={item.title}>
-                  <strong>{item.title} —</strong> {item.desc}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <p className="work__disclaimer">
-            Medical Disclaimer: AAWBA programs provide general education and
-            community support and are not a substitute for professional
-            medical advice, diagnosis, or treatment. Always consult a
-            qualified healthcare provider.
-          </p>
-        </div>
-      </section>
-
-      <section id="partners" className="partners">
-        <div className="partners__inner">
-          <div className="partners__intro">
-            <p className="partners__eyebrow">Partner With Us</p>
-            <h2>Better together</h2>
-          </div>
-
-          <div className="partners__categories">
-            {PARTNER_CATEGORIES.map((category) => (
-              <div className="partners__category" key={category.title}>
-                <h3>{category.title}</h3>
-                <p>{category.desc}</p>
-              </div>
+          <div className="events__grid">
+            {UPCOMING_EVENTS.map((event) => (
+              <EventCard event={event} key={event.slug} />
             ))}
           </div>
 
-          <div className="partners__logos">
-            <p className="partners__logos-label">Our Partners</p>
-            <PartnersSlider logos={PARTNER_LOGOS} />
+          <div className="events__cta">
+            <Link to="/activities" className="btn btn--solid">
+              Explore More
+            </Link>
           </div>
         </div>
       </section>
@@ -361,6 +258,26 @@ function Home() {
             <h3>Board of Directors</h3>
             <div className="leadership__board-grid">
               {BOARD.map((member) => (
+                <div className="leadership__board-member" key={member.name}>
+                  <button
+                    type="button"
+                    className="leadership__board-photo"
+                    onClick={() => setActivePerson(member)}
+                    aria-label={`View details for ${member.name}`}
+                  >
+                    <img src={member.photo} alt={member.name} />
+                  </button>
+                  <p className="leadership__board-name">{member.name}</p>
+                  <p className="leadership__role">{member.role}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="leadership__staff">
+            <h3>Staffs</h3>
+            <div className="leadership__board-grid leadership__staff-grid">
+              {STAFF.map((member) => (
                 <div className="leadership__board-member" key={member.name}>
                   <button
                     type="button"

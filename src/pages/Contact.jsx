@@ -2,12 +2,12 @@ import { useState } from 'react'
 import logo from '../assets/AAWBA .png'
 import './Contact.css'
 
-const CONTACT_EMAIL = 'hello@aawba.org'
+const CONTACT_EMAIL = 'info@aawba.org'
 
 const CONTACT_DETAILS = [
   { label: 'Email', value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
-  { label: 'Phone', value: '(555) 010-1234', href: 'tel:+15550101234' },
-  { label: 'Address', value: '123 Community Way, Suite 200' },
+  { label: 'Phone', value: '(781) 363-9023', href: 'tel:+17813639023' },
+  { label: 'Address', value: '100 Galen St #204\nWatertown, MA 02472' },
 ]
 
 function Contact() {
