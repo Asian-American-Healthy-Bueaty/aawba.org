@@ -1,20 +1,24 @@
 import { Link, useParams } from 'react-router-dom'
 import { UPCOMING_EVENTS, PAST_EVENTS } from '../data/events'
 import GallerySlider from '../components/GallerySlider.jsx'
+import { useI18n } from '../i18n/useI18n.js'
+import { localize } from '../i18n/localize.js'
 import './EventDetail.css'
 
 function EventDetail() {
   const { slug } = useParams()
-  const event = [...UPCOMING_EVENTS, ...PAST_EVENTS].find((item) => item.slug === slug)
+  const { t, language } = useI18n()
+  const rawEvent = [...UPCOMING_EVENTS, ...PAST_EVENTS].find((item) => item.slug === slug)
+  const event = rawEvent ? localize(rawEvent, language) : null
 
   if (!event) {
     return (
       <section className="event-detail-hero">
         <div className="event-detail-hero__content">
           <Link to="/activities" className="event-detail__back">
-            ← Back to Activities
+            {t('eventDetail.backToActivities')}
           </Link>
-          <h1>Event not found</h1>
+          <h1>{t('eventDetail.notFound')}</h1>
         </div>
       </section>
     )
@@ -26,9 +30,9 @@ function EventDetail() {
         <div className="event-detail-hero__content">
           <div className="event-detail-hero__top">
             <Link to="/activities" className="event-detail__back">
-              ← Back to Activities
+              {t('eventDetail.backToActivities')}
             </Link>
-            {event.featured && <span className="event-detail__badge">Featured</span>}
+            {event.featured && <span className="event-detail__badge">{t('eventDetail.featured')}</span>}
           </div>
           <h1>{event.title}</h1>
           <p className="event-detail-hero__meta">
@@ -51,7 +55,7 @@ function EventDetail() {
 
           <div className="event-detail__body">
             <div className="event-detail__main">
-              <h2>About This Event</h2>
+              <h2>{t('eventDetail.aboutEvent')}</h2>
               {event.description.map((section, sectionIndex) => (
                 <div className="event-detail__section" key={sectionIndex}>
                   {section.heading && <h3>{section.heading}</h3>}
@@ -69,7 +73,7 @@ function EventDetail() {
                 </div>
               ))}
 
-              <h2>Gallery</h2>
+              <h2>{t('eventDetail.gallery')}</h2>
               <GallerySlider images={event.gallery} altPrefix={event.title} />
             </div>
 
@@ -77,15 +81,15 @@ function EventDetail() {
               <h3>{event.title}</h3>
 
               <div className="event-detail__field">
-                <p className="event-detail__field-label">Date</p>
+                <p className="event-detail__field-label">{t('eventDetail.dateLabel')}</p>
                 <p className="event-detail__field-value">{event.dateLabel}</p>
               </div>
               <div className="event-detail__field">
-                <p className="event-detail__field-label">Time</p>
+                <p className="event-detail__field-label">{t('eventDetail.timeLabel')}</p>
                 <p className="event-detail__field-value">{event.time}</p>
               </div>
               <div className="event-detail__field">
-                <p className="event-detail__field-label">Location</p>
+                <p className="event-detail__field-label">{t('eventDetail.locationLabel')}</p>
                 <p className="event-detail__field-value">{event.location}</p>
               </div>
 
@@ -96,11 +100,11 @@ function EventDetail() {
                   rel="noopener noreferrer"
                   className="event-detail__cta"
                 >
-                  RSVP / Register
+                  {t('eventDetail.rsvpRegister')}
                 </a>
               ) : (
                 <Link to="/contact" className="event-detail__cta">
-                  RSVP / Get Involved
+                  {t('eventDetail.rsvpGetInvolved')}
                 </Link>
               )}
             </aside>

@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import logo from '../assets/AAWBA .png'
+import { useI18n } from '../i18n/useI18n.js'
 import './Contact.css'
 
 const CONTACT_EMAIL = 'info@aawba.org'
 
-const CONTACT_DETAILS = [
-  { label: 'Email', value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
-  { label: 'Phone', value: '(781) 363-9023', href: 'tel:+17813639023' },
-  { label: 'Address', value: '100 Galen St #204\nWatertown, MA 02472' },
-]
-
 function Contact() {
+  const { t } = useI18n()
   const [form, setForm] = useState({ name: '', email: '', message: '' })
+
+  const CONTACT_DETAILS = [
+    { label: t('contact.labels.email'), value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
+    { label: t('contact.labels.phone'), value: '(781) 363-9023', href: 'tel:+17813639023' },
+    { label: t('contact.labels.address'), value: '100 Galen St #204\nWatertown, MA 02472' },
+  ]
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }))
@@ -30,20 +32,17 @@ function Contact() {
       <section className="contact-hero">
         <img className="contact-hero__watermark" src={logo} alt="" aria-hidden="true" />
         <div className="contact-hero__content">
-          <p className="contact-hero__eyebrow">Contact / Get Involved</p>
-          <h1>Let&apos;s build this together.</h1>
-          <p className="contact-hero__desc">
-            Whether it&apos;s volunteering, a partnership, or joining our
-            advisor network — we&apos;d love to hear from you.
-          </p>
+          <p className="contact-hero__eyebrow">{t('contact.hero.eyebrow')}</p>
+          <h1>{t('contact.hero.heading')}</h1>
+          <p className="contact-hero__desc">{t('contact.hero.desc')}</p>
         </div>
       </section>
 
       <section className="contact">
         <div className="contact__inner">
           <div className="contact__info">
-            <p className="contact__eyebrow">Get in Touch</p>
-            <h2>Reach us directly, or use the form</h2>
+            <p className="contact__eyebrow">{t('contact.info.eyebrow')}</p>
+            <h2>{t('contact.info.heading')}</h2>
 
             {CONTACT_DETAILS.map((item) => (
               <div className="contact__item" key={item.label}>
@@ -57,7 +56,7 @@ function Contact() {
             ))}
 
             <div className="contact__item">
-              <p className="contact__label">Follow Us</p>
+              <p className="contact__label">{t('contact.labels.followUs')}</p>
               <div className="contact__socials">
                 <span className="contact__social" aria-hidden="true" />
                 <span className="contact__social" aria-hidden="true" />
@@ -68,7 +67,7 @@ function Contact() {
 
           <form className="contact__form" onSubmit={handleSubmit}>
             <label className="contact__field">
-              Name
+              {t('contact.form.name')}
               <input
                 type="text"
                 name="name"
@@ -79,7 +78,7 @@ function Contact() {
             </label>
 
             <label className="contact__field">
-              Email
+              {t('contact.form.email')}
               <input
                 type="email"
                 name="email"
@@ -90,7 +89,7 @@ function Contact() {
             </label>
 
             <label className="contact__field">
-              Message
+              {t('contact.form.message')}
               <textarea
                 name="message"
                 rows="6"
@@ -101,7 +100,7 @@ function Contact() {
             </label>
 
             <button type="submit" className="contact__submit">
-              Send Message
+              {t('contact.form.submit')}
             </button>
           </form>
         </div>

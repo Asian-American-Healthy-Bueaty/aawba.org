@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import logo from '../assets/AAWBA .png'
+import { useI18n } from '../i18n/useI18n.js'
+import { LANGUAGES } from '../i18n/context.js'
 import './Header.css'
 
 const NAV_LINKS = [
-  { label: 'Home', path: '/' },
-  { label: 'About', path: '/', hash: '#about' },
-  { label: 'Activities', path: '/activities' },
-  { label: 'Leadership & Governance', path: '/', hash: '#leadership' },
+  { key: 'home', path: '/' },
+  { key: 'about', path: '/', hash: '#about' },
+  { key: 'activities', path: '/activities' },
+  { key: 'leadership', path: '/', hash: '#leadership' },
 ]
 
 const ANCHOR_HASHES = NAV_LINKS.filter((link) => link.hash).map((link) => link.hash)
@@ -51,7 +53,7 @@ function useScrollSpy(hashes, enabled) {
   return activeHash
 }
 
-function NavItem({ link, activeHash }) {
+function NavItem({ link, activeHash, label }) {
   if (link.hash) {
     const isActive = activeHash === link.hash
     return (
@@ -59,7 +61,7 @@ function NavItem({ link, activeHash }) {
         to={{ pathname: link.path, hash: link.hash }}
         className={'nav-link' + (isActive ? ' nav-link--active' : '')}
       >
-        {link.label}
+        {label}
       </Link>
     )
   }
@@ -76,12 +78,75 @@ function NavItem({ link, activeHash }) {
         return 'nav-link' + (active ? ' nav-link--active' : '')
       }}
     >
-      {link.label}
+      {label}
     </NavLink>
   )
 }
 
+function LanguageSwitcher({ className }) {
+  const { language, setLanguage, t } = useI18n()
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef(null)
+  const current = LANGUAGES.find((lang) => lang.code === language) ?? LANGUAGES[0]
+
+  useEffect(() => {
+    if (!open) return
+
+    const onPointerDown = (event) => {
+      if (rootRef.current && !rootRef.current.contains(event.target)) setOpen(false)
+    }
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+
+    document.addEventListener('mousedown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  return (
+    <div className={'lang-switcher' + (className ? ` ${className}` : '')} ref={rootRef}>
+      <button
+        type="button"
+        className="lang-switcher__toggle"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={t('header.languageAriaLabel')}
+        onClick={() => setOpen((isOpen) => !isOpen)}
+      >
+        {current.label}
+        <span className="lang-switcher__caret" aria-hidden="true">
+          ▾
+        </span>
+      </button>
+
+      {open && (
+        <ul className="lang-switcher__menu" role="listbox">
+          {LANGUAGES.map((lang) => (
+            <li key={lang.code} role="option" aria-selected={lang.code === language}>
+              <button
+                type="button"
+                className={'lang-switcher__option' + (lang.code === language ? ' is-active' : '')}
+                onClick={() => {
+                  setLanguage(lang.code)
+                  setOpen(false)
+                }}
+              >
+                {lang.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 function Header() {
+  const { t } = useI18n()
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
   const [menuLocation, setMenuLocation] = useState(location)
@@ -104,15 +169,15 @@ function Header() {
   return (
     <header className="site-header">
       <div className="site-header__bar">
-        <NavLink to="/" className="site-header__logo" aria-label="AAWBA home">
-          <img src={logo} alt="AAWBA logo" />
+        <NavLink to="/" className="site-header__logo" aria-label={t('header.homeAriaLabel')}>
+          <img src={logo} alt={t('header.logoAlt')} />
         </NavLink>
 
         <nav className="site-header__nav" aria-label="Primary">
           <ul>
             {NAV_LINKS.map((link) => (
-              <li key={link.label}>
-                <NavItem link={link} activeHash={activeHash} />
+              <li key={link.key}>
+                <NavItem link={link} activeHash={activeHash} label={t(`header.nav.${link.key}`)} />
               </li>
             ))}
           </ul>
@@ -120,17 +185,15 @@ function Header() {
 
         <div className="site-header__actions">
           <NavLink to="/contact" className="nav-link nav-link--cta">
-            Contact / Get Involved
+            {t('header.cta')}
           </NavLink>
-          <button type="button" className="lang-toggle">
-            中文
-          </button>
+          <LanguageSwitcher />
         </div>
 
         <button
           type="button"
           className={'menu-toggle' + (menuOpen ? ' menu-toggle--open' : '')}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={menuOpen ? t('header.closeMenu') : t('header.openMenu')}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}
         >
@@ -144,18 +207,16 @@ function Header() {
         <nav aria-label="Primary mobile">
           <ul>
             {NAV_LINKS.map((link) => (
-              <li key={link.label}>
-                <NavItem link={link} activeHash={activeHash} />
+              <li key={link.key}>
+                <NavItem link={link} activeHash={activeHash} label={t(`header.nav.${link.key}`)} />
               </li>
             ))}
           </ul>
         </nav>
         <NavLink to="/contact" className="nav-link nav-link--cta nav-link--cta-mobile">
-          Contact / Get Involved
+          {t('header.cta')}
         </NavLink>
-        <button type="button" className="lang-toggle lang-toggle--mobile">
-          中文
-        </button>
+        <LanguageSwitcher className="lang-switcher--mobile" />
       </div>
     </header>
   )
