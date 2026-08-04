@@ -6,10 +6,11 @@
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages
       // https://github.com/rafgraph/spa-github-pages
-      // Redirects a deep link / refresh (e.g. /aawba.org/activities) to
-      // index.html, encoding the real path in a query string so it can be
-      // restored once the app loads.
-      var pathSegmentsToKeep = 1
+      // Redirects a deep link / refresh (e.g. /activities) to index.html,
+      // encoding the real path in a query string so it can be restored once
+      // the app loads. Served from the custom domain root, so no path
+      // segments need to be preserved.
+      var pathSegmentsToKeep = 0
 
       var l = window.location
       l.replace(
